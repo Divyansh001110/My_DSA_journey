@@ -1,0 +1,7 @@
+#Problems solve today
+Problem name : Minimize cost of operation to equalize tower heights (GFG POTD 16/06/2025)
+problem link: https://www.geeksforgeeks.org/problems/equalize-the-towers2804/1
+
+Brute force approach: for every height in heights , check the cost and return the minimum cost. TC:O(n2) SC:O(1)
+better approach : use binary search as when we are at the lowest and heighest value of heights then the cost is expensive , when we move towards a middle value of them then the cost reduces ans reaches a minimum then again rises.
+so it shows a V shaped behavior of costs with heights. We use highest andlowest value of heights as range for binary search
