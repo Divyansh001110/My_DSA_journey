@@ -1,1 +1,81 @@
+problem:https://leetcode.com/problems/balanced-binary-tree/description/ 
+approach 1: calculate height of left and right subtree for each node and check whether they are balanced or not. TC:O(n2) , SC: O(1) as no additional data structures or memory is allocated.O(H): Recursive Stack Space is used to calculate the height of the tree at each node which is proportional to the height of the tree.The recursive nature of the getHeight function, which incurs space on the call stack for each recursive call until it reaches the leaf nodes or the height of the tree
+optimal approach : we use only the height function to return -1 when the absolute difference between left and right subtree's height is more than one.
+as height function goes over each node recursively, just by adding this  condition we are able to check the difference between height of left and right subtree. TC:O(n) SC:O(1)
+class Solution {
+public:
+    int height(TreeNode *node){
+        if(node == nullptr) return 0;
+        int lh = height(node->left);
+        int rh = height(node->right);
+
+        if(abs(lh-rh)>1) return -1;
+        if(lh == -1 || rh == -1) return -1;
+
+        return 1 + max(lh,rh);
+    }
+    bool isBalanced(TreeNode* root) {
+        if(root == NULL) return true;
+        // int hl = height(root->left);
+        // int hr = height(root->right);
+
+        // if(abs(hl-hr) > 1){
+        //     return false;
+        // }
+        // return (isBalanced(root->left) && isBalanced(root->right));
+        // return true;
+        return (height(root) != -1);
+    }
+};
+problem:https://leetcode.com/problems/diameter-of-binary-tree/submissions/1683714564/
+approach: use function height, as this fucntion traverses through each node, we can calucate the diameter by adding diameter = max(leftheight+rightheight,diameter) with it.
+TC:O(N) SC:O(N) naive approach is to calculate height of left and right subtrees then call the diamtert function with root's left and right, then return the max(rootdiameter,leftdiameter+rightdiameter)
+class Solution {
+public:
+    int height(TreeNode *node,int &dia){
+        if(node == NULL) return 0;
+        int lh = height(node->left,dia);
+        int rh = height(node->right,dia);
+        dia = max(dia,lh+rh);
+        return 1 + max(lh,rh);
+    }
+    int diameterOfBinaryTree(TreeNode* root) {
+        if(root == nullptr) return 0;
+
+        // int left = height(root->left);
+        // int right = height(root->right);
+         
+        // int rootdiameter = left+ right;
+
+        // int leftdiameter = diameterOfBinaryTree(root->left);
+        // int rightdiameter = diameterOfBinaryTree(root->right);
+        int diameter = 0;
+        height(root,diameter);
+        return diameter;
+        // return max(max(leftdiameter,rightdiameter),rootdiameter);
+        // return abs(left+right);
+
+    }
+};
+problem:https://leetcode.com/problems/same-tree/description/
+approach : recursively check whethere the node given of both trees contain same data or not or both of them are null
+SC:(1) TC: O(1)
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(!p && !q){
+            return true;
+        }
+        if(p== nullptr || q == nullptr){
+            return false;
+        }
+        if(p->val != q->val){
+            return false;
+        }
+        return (isSameTree(p->left,q->left) && isSameTree(p->right,q->right));
+        
+    }
+};
+
+
 
