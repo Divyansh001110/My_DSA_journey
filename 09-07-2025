@@ -1,0 +1,82 @@
+Path sum variants
+
+problem : https://leetcode.com/problems/path-sum/description/
+approach : recursively check each path from root to leaf node if the sum of values is equal to target value or not. or recursively reach leaf fromm root while subtracting the target value and check at lead node if current node value is equal to current target value or not
+example:
+      5
+     / \
+    4   8
+   /   / \
+ 11  13  4
+ / \       \
+7   2       1
+Recursion Tree for hasPathSum(root, 22)
+Let's expand each call as a tree with indentation showing depth.
+
+Call Stack:
+bash
+Copy
+Edit
+solve(5, 22, 0)
+├── sum = 0 + 5 = 5
+├── solve(4, 22, 5)
+│   ├── sum = 5 + 4 = 9
+│   ├── solve(11, 22, 9)
+│   │   ├── sum = 9 + 11 = 20
+│   │   ├── solve(7, 22, 20)
+│   │   │   ├── sum = 20 + 7 = 27 → false
+│   │   └── solve(2, 22, 20)
+│   │       ├── sum = 20 + 2 = 22 → ✅ true
+│   └── returns true
+└── solve(8, 22, 5)
+    ├── sum = 5 + 8 = 13
+    ├── solve(13, 22, 13)
+    │   ├── sum = 13 + 13 = 26 → false
+    └── solve(4, 22, 13)
+        ├── sum = 13 + 4 = 17
+        └── solve(1, 22, 17)
+            ├── sum = 17 + 1 = 18 → false
+✅ Final Result
+The path 5 → 4 → 11 → 2 gives sum 22, so hasPathSum() returns true.
+
+
+
+code:
+bool solve(TreeNode *root,int target,int sum){
+       if(root == nullptr) return false;
+        if(root ->left == NULL && root->right == NULL) {
+            sum+= root->val;
+            return (sum==target);
+        }
+       sum+= root->val;
+    
+       return (solve(root->left,target,sum) || solve(root->right,target,sum));
+}
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        return solve(root,targetSum,0);
+    }
+ problem : https://leetcode.com/problems/path-sum-ii/description/
+approach same as above just keep data structures correctly
+code:
+void solve(TreeNode *root,int target,vector<int> &ds,vector<vector<int>> &ans){
+        if(root == nullptr) return;
+        ds.push_back(root->val);
+        //if at leaf node
+        if(!root->left && !root->right){
+           if(root->val == target){
+            ans.push_back(ds);
+           }
+            ds.pop_back();
+            return;
+        }
+        target -= root->val;
+        solve(root->left,target,ds,ans);
+        solve(root->right,target,ds,ans);
+        ds.pop_back();
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<int> ds;
+        vector<vector<int>> ans;
+        solve(root,targetSum,ds,ans);
+        return ans;
+    }
