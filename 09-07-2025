@@ -80,3 +80,36 @@ void solve(TreeNode *root,int target,vector<int> &ds,vector<vector<int>> &ans){
         solve(root,targetSum,ds,ans);
         return ans;
     }
+problem: https://leetcode.com/problems/binary-tree-maximum-path-sum/
+approach: ✅ Approach: Postorder DFS (Bottom-Up Recursion)
+🧠 Key Idea:
+At every node:
+
+Compute max gain from left and right subtree.
+
+The best path through this node is:
+left + node + right.
+
+The value returned up is:
+node + max(left, right) (because parent can choose only one side to extend the path).
+
+Update a global ans with the maximum path sum seen so far.
+
+code :
+int solve(TreeNode* root, int &ans) {
+    if (!root) return 0;
+
+    int l = max(0, solve(root->left, ans));  // Left max gain
+    int r = max(0, solve(root->right, ans)); // Right max gain
+
+    ans = max(ans, root->val + l + r);       // Max path through current node
+
+    return root->val + max(l, r);            // Max gain to pass upward
+}
+
+int maxPathSum(TreeNode* root) {
+    int ans = root->val;  // initialize with root val in case all are negative
+    solve(root, ans);
+    return ans;
+}
+
